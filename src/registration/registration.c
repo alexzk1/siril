@@ -683,7 +683,7 @@ int register_star_alignment(struct registration_args *args) {
 						free(stars[i++]);
 					free(stars);
 				}
-				real_number = frame - failed - skipped
+				real_number = frame - failed - skipped;
 				fit_sequence_get_image_filename(args->seq, real_number, filename,
 						TRUE);
 
