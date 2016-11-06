@@ -504,7 +504,7 @@ static void _print_result(TRANS *trans, float FWHMx, float FWHMy) {
 }
 
 int register_star_alignment(struct registration_args *args) {
-	int frame, ref_image, ret, i;
+	int frame, ref_image, ret, i, real_number;
 	int abort = 0;
 	int fitted_stars, failed = 0, skipped;
 	float nb_frames, cur_nb;
@@ -683,12 +683,13 @@ int register_star_alignment(struct registration_args *args) {
 						free(stars[i++]);
 					free(stars);
 				}
-				fit_sequence_get_image_filename(args->seq, frame, filename,
+				real_number = frame - failed - skipped
+				fit_sequence_get_image_filename(args->seq, real_number, filename,
 						TRUE);
 
 				if (args->seq->type == SEQ_SER)
 					ser_write_frame_from_fit(new_ser, &fit,
-							frame - failed - skipped);
+							real_number);
 				else {
 					snprintf(dest, 256, "%s%s", args->prefix, filename);
 					savefits(dest, &fit);
