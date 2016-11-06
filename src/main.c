@@ -45,6 +45,8 @@
 #include "core/undo.h"
 #include "io/single_image.h"
 
+#include <execinfo.h>
+#include <signal.h>
 #define GLADE_FILE "siril3.glade"
 
 /* the global variables of the whole project */
@@ -54,6 +56,16 @@ fits wfit[5];	// used for temp files, can probably be replaced by local variable
 GtkBuilder *builder;	// get widget references anywhere
 void initialize_scrollbars();
 
+void SignalHandler(int signal)
+{
+    void *array[15];
+    size_t size;
+    // get void*'s for all entries on the stack
+    size = backtrace(array, 15);
+    // print out all the frames to stderr
+    fprintf(stderr, "Error: signal %d:\n", signal);
+    backtrace_symbols_fd(array, size, STDERR_FILENO);
+}
 
 char *siril_sources[] = {
 	"",
@@ -107,7 +119,8 @@ int main(int argc, char *argv[]) {
 	sigemptyset(&sigIntHandler.sa_mask);
 	sigIntHandler.sa_flags = 0;
 	sigaction(SIGINT, &sigIntHandler, NULL);
-
+        signal(SIGSEGV , SignalHandler);
+        
 	while (1) {
 		signed char c = getopt(argc, argv, "i:hfv");
 		if (c == '?') {

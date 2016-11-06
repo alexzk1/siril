@@ -44,7 +44,7 @@ if test "x$remember_set_CFLAGS" = "x"; then
 	fi
 fi
 
-CFLAGS="$CFLAGS $OPENMP_CFLAGS"
+CFLAGS="$CFLAGS $OPENMP_CFLAGS -DNDEBUG"
 CXXFLAGS="$CFLAGS"
 
 if test `uname` != "Darwin"; then
