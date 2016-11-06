@@ -56,17 +56,6 @@ fits wfit[5];	// used for temp files, can probably be replaced by local variable
 GtkBuilder *builder;	// get widget references anywhere
 void initialize_scrollbars();
 
-void SignalHandler(int signal)
-{
-    void *array[15];
-    size_t size;
-    // get void*'s for all entries on the stack
-    size = backtrace(array, 15);
-    // print out all the frames to stderr
-    fprintf(stderr, "Error: signal %d:\n", signal);
-    backtrace_symbols_fd(array, size, STDERR_FILENO);
-}
-
 char *siril_sources[] = {
 	"",
 #if (defined(__APPLE__) && defined(__MACH__))
@@ -91,6 +80,19 @@ void signal_handled(int s) {
 	exit(EXIT_FAILURE);
 
 }
+
+void SignalHandler(int signal)
+{
+    void *array[15];
+    size_t size;
+    // get void*'s for all entries on the stack
+    size = backtrace(array, 15);
+    // print out all the frames to stderr
+    fprintf(stderr, "Error: signal %d:\n", signal);
+    backtrace_symbols_fd(array, size, STDERR_FILENO);
+    signal_handled(signal);
+}
+
 
 int main(int argc, char *argv[]) {
 	int i;

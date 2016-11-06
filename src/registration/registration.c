@@ -683,18 +683,15 @@ int register_star_alignment(struct registration_args *args) {
 						free(stars[i++]);
 					free(stars);
 				}
-				//real_number = frame - failed - skipped;
-				fit_sequence_get_image_filename(args->seq, real_number, filename,
-						TRUE);
+				
+				fit_sequence_get_image_filename(args->seq, ++real_number, filename, TRUE);
 
 				if (args->seq->type == SEQ_SER)
-					ser_write_frame_from_fit(new_ser, &fit,
-							real_number);
+					ser_write_frame_from_fit(new_ser, &fit, frame - failed - skipped);
 				else {
 					snprintf(dest, 256, "%s%s", args->prefix, filename);
 					savefits(dest, &fit);
-				}
-				++real_number;
+				}				
 				cur_nb += 1.f;
 				set_progress_bar_data(NULL, cur_nb / nb_frames);
 			}
@@ -1113,7 +1110,7 @@ static gboolean end_register_idle(gpointer p) {
 #ifdef HAVE_OPENCV
 		if (args->func == &register_star_alignment) {
 			if (args->load_new_sequence) {
-				int frame, new_frame;
+				int frame, new_frame, real_number;
 				regdata *new_data;
 				imgdata *new_image;
 
@@ -1134,7 +1131,7 @@ static gboolean end_register_idle(gpointer p) {
 				/* If images have not been registered we have to reorganize data and images */
 				new_data = calloc(args->seq->new_total, sizeof(regdata));
 				new_image = calloc(args->seq->new_total, sizeof(imgdata));
-				for (frame = 0, new_frame = 0; frame < args->seq->number;
+				for (frame = 0, new_frame = 0, real_number = 0; frame < args->seq->number;
 						frame++) {
 					if (!args->process_all_frames
 							&& !args->seq->imgparam[frame].incl)
@@ -1143,6 +1140,7 @@ static gboolean end_register_idle(gpointer p) {
 						new_data[new_frame] =
 								args->seq->regparam[args->layer][frame];
 						new_image[new_frame] = args->seq->imgparam[frame];
+                                                new_image[new_frame].filenum = ++real_number; // files were sequentaly renamed above
 						new_frame++;
 					}
 				}
