@@ -1140,7 +1140,7 @@ static gboolean end_register_idle(gpointer p) {
 						new_data[new_frame] =
 								args->seq->regparam[args->layer][frame];
 						new_image[new_frame] = args->seq->imgparam[frame];
-                                                new_image[new_frame].filenum = real_number++; // files were sequentaly renamed above
+                                                new_image[new_frame].filenum = ++real_number; // files were sequentaly renamed above
 						new_frame++;
 					}
 				}
