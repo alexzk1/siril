@@ -615,7 +615,7 @@ int register_star_alignment(struct registration_args *args) {
 	}
 
 	skipped = 0;
-	for (frame = 0, cur_nb = 0.f; frame < args->seq->number; frame++) {
+	for (frame = 0, cur_nb = 0.f, real_number = 0; frame < args->seq->number; frame++) {
 		if (!abort) {
 			if (args->run_in_thread && !get_thread_run()) {
 				abort = 1;
@@ -683,7 +683,7 @@ int register_star_alignment(struct registration_args *args) {
 						free(stars[i++]);
 					free(stars);
 				}
-				real_number = frame - failed - skipped;
+				//real_number = frame - failed - skipped;
 				fit_sequence_get_image_filename(args->seq, real_number, filename,
 						TRUE);
 
@@ -694,7 +694,7 @@ int register_star_alignment(struct registration_args *args) {
 					snprintf(dest, 256, "%s%s", args->prefix, filename);
 					savefits(dest, &fit);
 				}
-
+				++real_number;
 				cur_nb += 1.f;
 				set_progress_bar_data(NULL, cur_nb / nb_frames);
 			}
