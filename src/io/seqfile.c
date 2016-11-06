@@ -301,7 +301,7 @@ int writeseqfile(sequence *seq){
         fprintf(stderr, "L %d\n", seq->nb_layers);
         fprintf(seqfile, "#L - number of the layers\n");
         fprintf(seqfile, "L %d\n", seq->nb_layers);
-        fprintf(seqfile, "#I - filenum(ondisk filename number), incl, mean, median, sigma, avgdev, mad, sqrtbwmv, location, scale, min, max\n");
+        fprintf(seqfile, "\n#I - filenum(ondisk filename number), incl, mean, median, sigma, avgdev, mad, sqrtbwmv, location, scale, min, max\n");
         for(i=0; i < seq->number; ++i){
                 if (seq->imgparam[i].stats) {
                         fprintf(seqfile,"I %d %d %g %g %g %g %g %g %g %g %g %g\n",
@@ -322,7 +322,7 @@ int writeseqfile(sequence *seq){
                                         seq->imgparam[i].incl);
                 }
         }
-        fprintf(seqfile, "#Rlayernumber - shiftx, shifty, rot_centre_x, rot_centre_y, angle, fwhm, quality\n");
+        fprintf(seqfile, "\n#Rlayernumber - shiftx, shifty, rot_centre_x, rot_centre_y, angle, fwhm, quality\n");
         for(j=0; j < seq->nb_layers; j++) {
                 if (seq->regparam[j]) {
                         for (i=0; i < seq->number; ++i) {
