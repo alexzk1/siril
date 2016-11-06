@@ -684,7 +684,7 @@ int register_star_alignment(struct registration_args *args) {
 					free(stars);
 				}
 				
-				fit_sequence_get_image_filename(args->seq, ++real_number, filename, TRUE);
+				fit_sequence_get_image_filename(args->seq, real_number++, filename, TRUE);
 
 				if (args->seq->type == SEQ_SER)
 					ser_write_frame_from_fit(new_ser, &fit, frame - failed - skipped);
@@ -1140,7 +1140,7 @@ static gboolean end_register_idle(gpointer p) {
 						new_data[new_frame] =
 								args->seq->regparam[args->layer][frame];
 						new_image[new_frame] = args->seq->imgparam[frame];
-                                                new_image[new_frame].filenum = ++real_number; // files were sequentaly renamed above
+                                                new_image[new_frame].filenum = real_number++; // files were sequentaly renamed above
 						new_frame++;
 					}
 				}
